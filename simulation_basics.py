@@ -3,7 +3,7 @@ import numpy as np
 
 k = 3
 x0 = 1
-delta_t = 0.001
+delta_t = 0.0001
 
 
 ts = [0]
