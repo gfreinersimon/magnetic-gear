@@ -4,8 +4,8 @@ from matplotlib import pyplot as plt
 import animate
 
 #spinner(number of magnets, radius, moment of inertia, position of the centers, initial angle, initial omega)
-spinner1 = objects.spinner(2,0.05,1,np.array([-0.0725,0]),0,0,False)
-spinner2 = objects.spinner(2,0.05,1,np.array([0.0725,0]),0,10,True)
+spinner1 = objects.spinner(3,0.05,1,np.array([-0.0725,0]),0,0,False)
+spinner2 = objects.spinner(3,0.05,1,np.array([0.0725,0]),0,10,True)
 
 
 spinners = [spinner1, spinner2]
