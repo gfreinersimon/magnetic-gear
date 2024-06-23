@@ -8,6 +8,8 @@ from scipy.integrate import solve_ivp
 spinner1 = objects.spinner(3,0.05,1,np.array([-0.0725,0]),0,0,False)
 spinner2 = objects.spinner(3,0.05,1,np.array([0.0725,0]),0,1,True)
 
+spinners = [spinner1, spinner2]
+
 #inital angle and omega for spinner 2
 theta2_0 = 0
 dtheta2 = 1
@@ -36,15 +38,15 @@ def ode(t,y):
 
 t_span = (0,10)
 
-T_thetas = np.linspace(0,2*np.pi,1000)
-T_ys = np.zeros((2,1000))
-T_ys[0,:] = T_thetas
-Ts = ode(T_thetas, )
+# T_thetas = np.linspace(0,2*np.pi,1000)
+# T_ys = np.zeros((2,1000))
+# T_ys[0,:] = T_thetas
+# Ts = ode(T_thetas, )
 
 ts_eval = np.linspace(0,10,1000)
 
 sol = solve_ivp(ode, t_span, y0, t_eval = ts_eval,method = 'Radau' )
-
+print(sol.y.size)
 spinner1.thetas, spinner1.dthetas = sol.y
 spinner2.thetas = ts_eval * dtheta2 + theta2_0
 
