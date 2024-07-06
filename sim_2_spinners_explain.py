@@ -9,7 +9,8 @@ from scipy.integrate import solve_ivp
 
 spinner_radius = 3e-2 #distance from center of spinner to center of magnet[m]
 center_distance = 8.5e-2 #distance between centers of spinners[m]
-magnetic_force_constant = 1.10870776e-07 #determined from fitting[N*m^4]
+magnetic_force_constant = 1.10870776e-07 #determined from fitting[N*m^exponent]
+exponent = 2.8 #deterined from the fit as well dimensionless
 omega = 1.2467 #angular velocity of motorized spinner
 
 orientation = 1 # 1 or -1 if 1 magnets repell if -1 magnets attract
@@ -35,7 +36,7 @@ output_path = 'out.csv'
 
 #helper functions
 def calc_magnetic_force_magnitude(d_magnet_center):
-    res = orientation * magnetic_force_constant/d_magnet_center**4
+    res = orientation * magnetic_force_constant/d_magnet_center**exponent
     return res
 
 def calc_rel_pos_m(angle,m_index):
