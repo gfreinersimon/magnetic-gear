@@ -8,10 +8,10 @@ from scipy.integrate import solve_ivp
 #setup parameters:
 
 spinner_radius = 3e-2 #distance from center of spinner to center of magnet[m]
-center_distance = 8.5e-2 #distance between centers of spinners[m]
-magnetic_force_constant = 1.10870776e-07 #determined from fitting[N*m^exponent]
-exponent = 2.8 #deterined from the fit as well dimensionless
-omega = 1.2467 #angular velocity of motorized spinner
+center_distance = 9.50000e-2 #distance between centers of spinners[m]
+magnetic_force_constant = 6.22e-06 #determined from fitting[N*m^exponent]
+exponent = 2.95 #determined from the fit as well dimensionless
+omega = -2.345 #angular velocity of motorized spinner
 
 orientation = 1 # 1 or -1 if 1 magnets repell if -1 magnets attract
 
@@ -20,16 +20,16 @@ center_sf = [center_distance, 0]
 
 
 I_spinner = 8.24885069e-05 #determined from fitting inertia curves [kg*m^2]
-m_magnet = 2.69e-3 #mass of one magnet [kg]
-n_magnets = 2 #number of magnets per stack
+m_magnet = 2.45e-3 #mass of one magnet [kg]
+n_magnets = 5 #number of magnets per stack
 magnet_radius = 0.0075 #radius of the magnets [m]
 I_total = I_spinner + 3*n_magnets*m_magnet*(1./2.*magnet_radius**2+center_distance**2)
 
 
 #initial conditons
-theta_0 = np.pi #magnet pointing away from center of other spinner [rad]
+theta_0 = 0 #magnet pointing away from center of other spinner [rad]
 theta_dot_0 = 0 # positive: counter clockwise [rad/s]
-phi_0 = np.pi #initial angle of motorized spinner if 0 magnet points towards center of other spinner 
+phi_0 = 0 #initial angle of motorized spinner if 0 magnet points towards center of other spinner 
 
 #output
 output_path = 'out.csv'
