@@ -1,0 +1,21 @@
+{
+    "spinner_radius": 0.03,
+    "center_distance": 0.095,
+    "magnetic_force_constant": 6.22e-06,
+    "exponent": 2.95,
+    "omega": -2.345,
+    "orientation": 1,
+    "center_sm": [0, 0],
+    "center_sf": [0.095, 0],
+    "I_spinner": 8.24885069e-05,
+    "m_magnet": 0.00245,
+    "n_magnets": 5,
+    "magnet_radius": 0.0075,
+    "I_total": 0.00012972157625,
+    "theta_0": 0,
+    "theta_dot_0": 0,
+    "phi_0": 0,
+    "final_time": 60,
+    "n_eval": 1000,
+    "out_path": "simulation_final/out.csv"
+}
