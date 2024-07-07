@@ -2,16 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.integrate import solve_ivp
-
-#define constants
+import random
 
 #setup parameters:
 
+
 spinner_radius = 3e-2 #distance from center of spinner to center of magnet[m]
-center_distance = 9.50000e-2 #distance between centers of spinners[m]
-magnetic_force_constant = 6.22e-06 #determined from fitting[N*m^exponent]
-exponent = 2.95 #determined from the fit as well dimensionless
-omega = -2.345 #angular velocity of motorized spinner
+center_distance = 8.5e-2 #distance between centers of spinners[m]
+magnetic_force_constant = 5.2e-07 #determined from fitting[N*m^exponent]
+exponent = 3.62 #determined from the fit as well dimensionless
+omega = -2.35 #angular velocity of motorized spinner
 
 orientation = 1 # 1 or -1 if 1 magnets repell if -1 magnets attract
 
@@ -20,8 +20,8 @@ center_sf = [center_distance, 0]
 
 
 I_spinner = 8.24885069e-05 #determined from fitting inertia curves [kg*m^2]
-m_magnet = 2.45e-3 #mass of one magnet [kg]
-n_magnets = 5 #number of magnets per stack
+m_magnet = 2.69e-3 #mass of one magnet [kg]
+n_magnets = 2 #number of magnets per stack
 magnet_radius = 0.0075 #radius of the magnets [m]
 I_total = I_spinner + 3*n_magnets*m_magnet*(1./2.*magnet_radius**2+spinner_radius**2)
 
@@ -69,7 +69,7 @@ def diff_eq(t,state):
     theta = state[0]
     thetap = state[1]
     phi = phi_0 + omega * t
-    sum_torques = calc_sum_torques(theta,phi)
+    sum_torques = calc_sum_torques(theta,phi)-thetap*0.00001
     thetapp = sum_torques/(I_total)
     dstate = [thetap,thetapp]
     return dstate
@@ -79,19 +79,58 @@ def diff_eq(t,state):
 final_time = 60 #time where simulation stops[s]
 
 timespan = (0,final_time)
-init_state = [theta_0,theta_dot_0]
 
 n_eval = 1000 #number of times solution is saved
 dt_eval = final_time/n_eval
 
 evals = np.linspace(0,final_time, n_eval)
 
-solution = solve_ivp(diff_eq, timespan, init_state, method='RK45',t_eval=evals)
+#varying parameters:
 
-ts = solution.t
-thetas = solution.y[0]
-thetaps = solution.y[1]
+dist_range = np.linspace(7e-2,0.1,10)
+omega_range = np.linspace(-5,-1,10)
 
+max_angles = []
+std_devs = []
+for d in omega_range:
+    max_angles_d = []
+    for i in range (10):
+        print(f"iteration {i} at omega {d}")
+
+        theta_0 = theta_0 + (random.random()-0.5)*0.1
+        init_state = [theta_0,d]
+        solution = solve_ivp(diff_eq, timespan, init_state, method='RK45',t_eval=evals)
+        ts = solution.t
+        thetas = solution.y[0]
+        thetaps = solution.y[1]
+        max_angles_d.append(np.max(thetas))
+    max_angles.append(np.average(max_angles_d))    
+    std_devs.append(np.std(max_angles_d))
+
+output_path_variation = 'out_variation.csv'
+df_variation = pd.DataFrame({
+    'distances[m]': omega_range,
+    'theta max[rad]': max_angles,
+    'std dev[rad]': std_devs
+})
+
+df_variation.to_csv(output_path_variation, index=False)
+
+
+
+plt.scatter(omega_range,max_angles,c='r')
+plt.errorbar(omega_range,max_angles,std_devs,capsize=20,c='black')
+plt.show()
+
+'''
+phis = phi_0 + ts * omega
+
+torques = []
+for i in range(len(phis)):
+    torques.append(calc_sum_torques(thetas[i],phis[i]))
+
+plt.plot(ts,thetaps)
+plt.show()
 plt.plot(ts,thetas-np.pi)
 plt.show()
 
@@ -108,3 +147,5 @@ df.to_csv(output_path, index=False)
 
 print(f'time step = {dt_eval}')
 print(f'center distance = {center_distance}')
+
+'''
