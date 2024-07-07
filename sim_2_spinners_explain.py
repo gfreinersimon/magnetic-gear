@@ -23,7 +23,7 @@ I_spinner = 8.24885069e-05 #determined from fitting inertia curves [kg*m^2]
 m_magnet = 2.45e-3 #mass of one magnet [kg]
 n_magnets = 5 #number of magnets per stack
 magnet_radius = 0.0075 #radius of the magnets [m]
-I_total = I_spinner + 3*n_magnets*m_magnet*(1./2.*magnet_radius**2+center_distance**2)
+I_total = I_spinner + 3*n_magnets*m_magnet*(1./2.*magnet_radius**2+spinner_radius**2)
 
 
 #initial conditons
@@ -82,6 +82,7 @@ timespan = (0,final_time)
 init_state = [theta_0,theta_dot_0]
 
 n_eval = 1000 #number of times solution is saved
+dt_eval = final_time/n_eval
 
 evals = np.linspace(0,final_time, n_eval)
 
@@ -104,3 +105,6 @@ df = pd.DataFrame({
 })
 
 df.to_csv(output_path, index=False)
+
+print(f'time step = {dt_eval}')
+print(f'center distance = {center_distance}')
