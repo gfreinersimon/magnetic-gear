@@ -54,7 +54,7 @@ def calc_sum_torques(theta,phi):
         
         for m_sm in range(3):
             pos_m_sm = center_sm + calc_rel_pos_m(phi,m_sm)
-            connecting_vector = pos_m_sm - pos_m_sf #vector pointing from motorized spinner magnet to free spinner magnet
+            connecting_vector = pos_m_sf - pos_m_sm #vector pointing from motorized spinner magnet to free spinner magnet
             distance = np.sqrt(connecting_vector[0]**2 + connecting_vector[1]**2)
             connecting_unit_vector = connecting_vector/distance
             force = calc_magnetic_force_magnitude(distance)*connecting_unit_vector
@@ -70,7 +70,7 @@ def diff_eq(t,state):
     theta = state[0]
     thetap = state[1]
     phi = phi_0 + omega * t
-    sum_torques = calc_sum_torques(theta,phi)
+    sum_torques = calc_sum_torques(theta,phi)# - thetap*1e-10
     thetapp = sum_torques/(I_total)
     dstate = [thetap,thetapp]
     return dstate
@@ -87,11 +87,21 @@ dt_eval = final_time/n_eval
 
 evals = np.linspace(0,final_time, n_eval)
 
-solution = solve_ivp(diff_eq, timespan, init_state, method='RK45',t_eval=evals)
+solution = solve_ivp(diff_eq, timespan, init_state, method='Radau',t_eval=evals)
+
+
 
 ts = solution.t
 thetas = solution.y[0]
 thetaps = solution.y[1]
+
+phis = ts * omega + phi_0
+torques = []
+for i in range(len(phis)):
+    torques.append(calc_sum_torques(phis[i],thetas[i]))
+
+plt.plot(ts,torques)
+plt.show()
 
 plt.plot(ts,thetas-np.pi)
 plt.show()
