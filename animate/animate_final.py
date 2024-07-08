@@ -60,7 +60,7 @@ def load_config(file_path):
         config = json.load(file)
     return config
 
-config = load_config('simulation_final/config.json')
+config = load_config('animate/config.json')
 
 
 

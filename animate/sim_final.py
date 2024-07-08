@@ -11,7 +11,7 @@ def load_config(file_path):
     return config
 
 # Load configuration
-config = load_config('simulation_final/config.json')
+config = load_config('animate/config.json')
 
 # Accessing the variables
 spinner_radius = config['spinner_radius']
@@ -111,11 +111,12 @@ torques = []
 for i in range(len(phis)):
     torques.append(calc_sum_torques(phis[i],thetas[i]))
 
-plt.plot(ts,torques)
-plt.show()
+if(False):
+    plt.plot(ts,torques)
+    plt.show()
 
-plt.plot(ts,thetas-np.pi)
-plt.show()
+    plt.plot(ts,thetas-np.pi)
+    plt.show()
 
 
 #save data:
@@ -127,6 +128,3 @@ df = pd.DataFrame({
 })
 
 df.to_csv(output_path, index=False)
-
-print(f'time step = {dt_eval}')
-print(f'center distance = {center_distance}')

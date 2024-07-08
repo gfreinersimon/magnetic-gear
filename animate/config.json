@@ -17,5 +17,5 @@
     "phi_0": 0,
     "final_time": 60,
     "n_eval": 1000,
-    "out_path": "simulation_final/out.csv"
+    "out_path": "out/out1.csv"
 }
