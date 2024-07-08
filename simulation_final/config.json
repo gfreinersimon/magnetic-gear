@@ -1,8 +1,8 @@
 {
     "spinner_radius": 0.03,
-    "center_distance": 0.0950001,
+    "center_distance": 0.095000,
     "magnetic_force_constant": 6.22e-06,
-    "exponent":1,
+    "exponent":2.95,
     "omega": -2.345,
     "orientation": 1,
     "center_sm": [0, 0],

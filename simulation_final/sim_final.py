@@ -36,8 +36,19 @@ output_path = config['out_path']
 I_total = I_spinner + 3*n_magnets*m_magnet*(1./2.*magnet_radius**2**2)
 
 #helper functions
+
+max_force = 0.2
+min_force = 1e-2
 def calc_magnetic_force_magnitude(d_magnet_center):
     res = orientation * magnetic_force_constant/d_magnet_center**exponent
+    '''
+    if res > max_force:
+        print(f"capping force calculated is: {res}")
+        res = max_force
+    elif res < min_force:
+        print(f"capping downwards force calculated is : {res}")
+        res = 0#min_force
+    '''
     return res
 
 def calc_rel_pos_m(angle,m_index):
@@ -70,7 +81,7 @@ def diff_eq(t,state):
     theta = state[0]
     thetap = state[1]
     phi = phi_0 + omega * t
-    sum_torques = calc_sum_torques(theta,phi)# - thetap*1e-10
+    sum_torques = calc_sum_torques(theta,phi)# - thetap/np.abs(thetap)*1e-5 
     thetapp = sum_torques/(I_total)
     dstate = [thetap,thetapp]
     return dstate
@@ -87,7 +98,7 @@ dt_eval = final_time/n_eval
 
 evals = np.linspace(0,final_time, n_eval)
 
-solution = solve_ivp(diff_eq, timespan, init_state, method='Radau',t_eval=evals)
+solution = solve_ivp(diff_eq, timespan, init_state, method='RK45',t_eval=evals)
 
 
 
