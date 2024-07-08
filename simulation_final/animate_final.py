@@ -2,23 +2,23 @@ import numpy as np
 import pandas as pd
 import json
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation, FFMpegWriter
-
+import matplotlib.animation as animation
 
 def animate_spinner(sfx,sfy,smx,smy,radius,xlim,ylim):
     # Create a figure and axis
     fig, ax = plt.subplots()
+    ax.axis('off')
     ax.set_aspect('equal')
     ax.set_xlim(-xlim, xlim)
     ax.set_ylim(-ylim, ylim)
 
     # Plot the initial circles
     sf1 = plt.Circle((sfx[0][0],sfy[0][0]), radius, color='r', fill=False)
-    sf2 = plt.Circle((sfx[1][0],sfy[1][0]), radius, color='g', fill=False)
-    sf3 = plt.Circle((sfx[2][0],sfy[2][0]), radius, color='b', fill=False)
+    sf2 = plt.Circle((sfx[1][0],sfy[1][0]), radius, color='r', fill=False)
+    sf3 = plt.Circle((sfx[2][0],sfy[2][0]), radius, color='r', fill=False)
 
-    sm1 = plt.Circle((smx[0][0],smy[0][0]), radius, color='r', fill=False)
-    sm2 = plt.Circle((smx[1][0],smy[1][0]), radius, color='g', fill=False)
+    sm1 = plt.Circle((smx[0][0],smy[0][0]), radius, color='b', fill=False)
+    sm2 = plt.Circle((smx[1][0],smy[1][0]), radius, color='b', fill=False)
     sm3 = plt.Circle((smx[2][0],smy[2][0]), radius, color='b', fill=False)
 
     ax.add_patch(sf1)
@@ -41,10 +41,11 @@ def animate_spinner(sfx,sfy,smx,smy,radius,xlim,ylim):
         return sm1,sm2,sm3,sf1,sf2,sf3
 
     # Create the animation
-    ani = FuncAnimation(fig, update, frames=np.arange(0,len(smx[0])), blit=True)
-    #FFWriter = FFMpegWriter(fps=10)
-    #ani.save('animation.mp4',writer=FFWriter)
-
+    ani = animation.FuncAnimation(fig, update, frames=np.arange(0,len(smx[0])), blit=True)
+ 
+    Writer = animation.writers['ffmpeg']
+    writer = Writer(fps=30, metadata=dict(artist='Me'), bitrate=1800)
+    ani.save("circles_animation.mp4", writer=writer)
     
 
     plt.show()
@@ -101,9 +102,9 @@ for i in range(3):
 
 print(len(smx[0]))
 lim = config['center_distance']+magnet_radius
-animate_spinner(sfx,sfy,smx,smy,magnet_radius,lim*2,lim)
-
-
+smx = np.array(smx)-config['center_distance']/2
+sfx = np.array(sfx)-config['center_distance']/2
+animate_spinner(sfx,sfy,smx,smy,magnet_radius,lim,lim)
 
 
 
